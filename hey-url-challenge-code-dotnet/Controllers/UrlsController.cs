@@ -23,23 +23,63 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
             var model = new HomeViewModel();
             model.Urls = new List<Url>
             {
-                new Url()
+                new()
                 {
                     ShortUrl = "ABCDE",
                     Count = getrandom.Next(1, 10)
                 },
-                new Url()
+                new()
                 {
                     ShortUrl = "ABCDE",
                     Count = getrandom.Next(1, 10)
                 },
-                new Url()
+                new()
                 {
                     ShortUrl = "ABCDE",
                     Count = getrandom.Next(1, 10)
                 },
             };
+            model.NewUrl = new();
             return View(model);
         }
+
+        [Route("Create")]
+        public IActionResult Create() => new OkResult();
+
+        [Route("Visit")]
+        public IActionResult Visit(string url) => new OkResult();
+
+        [Route("Show")]
+        public IActionResult Show() => View(new ShowViewModel
+        {
+            Url = new Url {ShortUrl = "ABCDE", Count = getrandom.Next(1, 10)},
+            DailyClicks = new Dictionary<string, int>
+            {
+                {"1", 13},
+                {"2", 2},
+                {"3", 1},
+                {"4", 7},
+                {"5", 20},
+                {"6", 18},
+                {"7", 10},
+                {"8", 20},
+                {"9", 15},
+                {"10", 5}
+            },
+            BrowseClicks = new Dictionary<string, int>
+            {
+                { "IE", 13 },
+                { "Firefox", 22 },
+                { "Chrome", 17 },
+                { "Safari", 7 },
+            },
+            PlatformClicks = new Dictionary<string, int>
+            {
+                { "Windows", 13 },
+                { "macOS", 22 },
+                { "Ubuntu", 17 },
+                { "Other", 7 },
+            }
+        });
     }
 }
