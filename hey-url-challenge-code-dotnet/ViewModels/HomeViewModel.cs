@@ -6,13 +6,6 @@ namespace hey_url_challenge_code_dotnet.ViewModels
 {
     public class HomeViewModel
     {
-        public HomeViewModel()
-        {
-        }
-
-        public IEnumerable<Url> Urls
-        {
-            get; set;
-        }
+        public IEnumerable<Url> Urls { get; set; }
     }
 }
