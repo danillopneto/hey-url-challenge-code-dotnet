@@ -1,4 +1,5 @@
-﻿![FullStack Labs](app/assets/images/FSL-logo-portrait.png)
+![image](https://user-images.githubusercontent.com/2884124/122690230-ed159100-d1ed-11eb-9d66-28d391964349.png)
+
 
 # HeyURL! Code Challenge
 
