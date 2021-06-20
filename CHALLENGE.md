@@ -100,34 +100,10 @@ the API:
     }
   ]
 }
-```
-
-<<<<<<< HEAD
 
 # Accomplishment
 
 - Completed functionality 65%
 - Completed test 20%
-- # Completed bonus 15%
-
-6. Run specs
-
-```sh
-$ bin/rspec
+- Completed bonus 15%
 ```
-
-7. Start the server
-
-```sh
-$ bin/rails server
-```
-
-8. Open your browser
-
-[http://localhost:3000](http://localhost:3000/)
-
-## Challenge
-
-See [CHALLENGE.md](./CHALLENGE.md)
-
-> > > > > > > cb0416f9878e5d7e7d042576883d48de2e71dc6a
