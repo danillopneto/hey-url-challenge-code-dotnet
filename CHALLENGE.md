@@ -100,10 +100,10 @@ the API:
     }
   ]
 }
+```
 
-# Accomplishment
+# Scoring
 
 - Completed functionality 65%
 - Completed test 20%
 - Completed bonus 15%
-```
