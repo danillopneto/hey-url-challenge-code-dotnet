@@ -21,7 +21,7 @@ namespace HeyUrlChallengeCodeDotnet
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<ApplicationContext>(e => e.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase(databaseName: "HeyUrl"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
