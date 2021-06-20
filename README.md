@@ -1,4 +1,4 @@
-﻿![FullStack Labs](app/assets/images/FSL-logo-portrait.png)
+![FullStack Labs](/assets/FSL-logo-portrait.png)
 
 # HeyURL! Code Challenge
 
@@ -8,12 +8,11 @@ section before starting the challenge.
 
 ## Getting Started
 
-
 1. Install [Visual Studio 2019](https://visualstudio.microsoft.com/downloads/) or the [dotnet 5.0.7 SDK](https://dotnet.microsoft.com/download/dotnet/5.0)
 
 2. Clone repository
 
-7. Open the .sln file in Visual Studio 2019 and run the project, or start the application using the dotnet cli:
+3. Open the .sln file in Visual Studio 2019 and run the project, or start the application using the dotnet cli:
 
 ```sh
 $ cd hey-url-challenge-code-dotnet
@@ -25,4 +24,5 @@ $ dotnet watch run
 [https://localhost:5001/](https://localhost:5001/)
 
 ## Challenge
+
 See [CHALLENGE.md](./CHALLENGE.md)

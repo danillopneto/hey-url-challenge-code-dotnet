@@ -1,4 +1,4 @@
-﻿![FullStack Labs](app/assets/images/FSL-logo-portrait.png)
+![FullStack Labs](/assets/FSL-logo-portrait.png)
 
 # Before You Start
 
@@ -6,18 +6,21 @@ Please follow the [`Getting Started` section on README](./README.md) to set up
 your environment before starting the challenge.
 
 # Summary
+
 For this code challenge a Candidate will clone and setup an existing .NET MVC
-application.  The application will contain routes, migrations, models, and
+application. The application will contain routes, migrations, models, and
 minimal views but with no actual functionality created. The candidate will show
 all her/his expertise building apps with the .NET framework and problem
 solving skills.
 
 # Overview
+
 HeyURL! is a service to create awesome friendly URLs to make it easier for
 people to remember. Our team developed some mock views but they lack our awesome
 functionality.
 
 # Requirements
+
 1. Implement actions to create a short URL based on a given full URL
 1. If URL is not valid, the application returns an error message to the user
 1. We want to be able to provide basic click metrics to our users for each URL they generate.
@@ -30,6 +33,7 @@ functionality.
 1. Controllers, endpoints and models should be fully tested with NUnit
 
 # Spec for generating short URLs
+
 - It MUST have 5 characters in length e.g. NELNT
 - It MUST generate only upper case letters
 - It MUST NOT generate special characters
@@ -47,6 +51,7 @@ functionality.
    to extract device information about each click
 
 # Pages
+
 The following pages/urls are already built into our app:
 
 1. `GET /`: Contains the form and a list of the last 10 URL created with their
@@ -56,6 +61,7 @@ The following pages/urls are already built into our app:
 1. `GET /urls/:url`: Shows the metrics associated to the short URL
 
 # API - Optional Bonus Points
+
 We would like to have a way to retrieve the last 10 URLs created using an API
 endpoint. It should be JSON-API compliant. Here is an example of a response from
 the API:
@@ -96,7 +102,32 @@ the API:
 }
 ```
 
+<<<<<<< HEAD
+
 # Accomplishment
+
 - Completed functionality 65%
 - Completed test 20%
-- Completed bonus 15%
+- # Completed bonus 15%
+
+6. Run specs
+
+```sh
+$ bin/rspec
+```
+
+7. Start the server
+
+```sh
+$ bin/rails server
+```
+
+8. Open your browser
+
+[http://localhost:3000](http://localhost:3000/)
+
+## Challenge
+
+See [CHALLENGE.md](./CHALLENGE.md)
+
+> > > > > > > cb0416f9878e5d7e7d042576883d48de2e71dc6a
