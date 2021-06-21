@@ -31,6 +31,7 @@ functionality.
    1. An additional chart with a breakdown of browsers and platforms
 1. If someone tries to visit a invalid short URL then it should return a 404 page
 1. Controllers, endpoints and models should be fully tested with NUnit
+1. Provide EF migrations that can generate a SQL database schema compatible with the models
 
 # Spec for generating short URLs
 
@@ -49,6 +50,8 @@ functionality.
 1. Google Charts is already added to display charts but you can use any library
 1. Use the [`BrowserDetector` nuget package](https://github.com/kshyju/BrowserDetector) already installed
    to extract device information about each click
+1. `Microsoft.EntityFrameworkCore.InMemory` is used to simplify application setup and development, but you can
+   use a local instance of a relational database of your choice if you wish.
 
 # Pages
 
@@ -63,8 +66,11 @@ The following pages/urls are already built into our app:
 # API - Optional Bonus Points
 
 We would like to have a way to retrieve the last 10 URLs created using an API
-endpoint. It should be JSON-API compliant. Here is an example of a response from
-the API:
+endpoint. It should be [JSON-API](https://jsonapi.org/) compliant. There are packages
+like [JsonApiDotNetCore](https://www.jsonapi.net/index.html) that can help configure
+this format.
+
+Here is an example of a response from the API:
 
 ```
 {
@@ -105,5 +111,5 @@ the API:
 # Scoring
 
 - Completed functionality 65%
-- Completed test 20%
+- Completed NUnit tests 20%
 - Completed bonus 15%
