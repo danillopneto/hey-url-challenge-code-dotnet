@@ -4,6 +4,7 @@ using hey_url_challenge_code_dotnet.Models;
 using hey_url_challenge_code_dotnet.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Shyjus.BrowserDetection;
 
 namespace HeyUrlChallengeCodeDotnet.Controllers
 {
@@ -12,9 +13,11 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
     {
         private readonly ILogger<UrlsController> _logger;
         private static readonly Random getrandom = new Random();
+        private readonly IBrowserDetector browserDetector;
 
-        public UrlsController(ILogger<UrlsController> logger)
+        public UrlsController(ILogger<UrlsController> logger, IBrowserDetector browserDetector)
         {
+            this.browserDetector = browserDetector;
             _logger = logger;
         }
 
@@ -43,16 +46,13 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
             return View(model);
         }
 
-        [Route("Create")]
-        public IActionResult Create() => new OkResult();
+        [Route("/{url}")]
+        public IActionResult Visit(string url) => new OkObjectResult($"{url}, {this.browserDetector.Browser.OS}, {this.browserDetector.Browser.Name}");
 
-        [Route("Visit")]
-        public IActionResult Visit(string url) => new OkResult();
-
-        [Route("Show")]
-        public IActionResult Show() => View(new ShowViewModel
+        [Route("urls/{url}")]
+        public IActionResult Show(string url) => View(new ShowViewModel
         {
-            Url = new Url {ShortUrl = "ABCDE", Count = getrandom.Next(1, 10)},
+            Url = new Url {ShortUrl = url, Count = getrandom.Next(1, 10)},
             DailyClicks = new Dictionary<string, int>
             {
                 {"1", 13},
