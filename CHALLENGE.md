@@ -30,7 +30,7 @@ functionality.
    1. The user should be able to see total clicks per day on the current month
    1. An additional chart with a breakdown of browsers and platforms
 1. If someone tries to visit a invalid short URL then it should return a 404 page
-1. Controllers, endpoints and models should be fully tested with NUnit
+1. Business logic and requirements should be tested with NUnit
 1. Provide EF migrations that can generate a SQL database schema compatible with the models
 
 # Spec for generating short URLs
