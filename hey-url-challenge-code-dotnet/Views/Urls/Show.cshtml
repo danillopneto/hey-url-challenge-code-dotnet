@@ -67,7 +67,7 @@
     function drawBrowsersChart() {
       var data = google.visualization.arrayToDataTable([
         ['browser', 'clicks'],
-      ].concat(@Json.Serialize(Model.DailyClicks.Select(e => new object[] { e.Key, e.Value }))));
+      ].concat(@Json.Serialize(Model.BrowseClicks.Select(e => new object[] { e.Key, e.Value }))));
       var options = {
         title: 'Browsers'
       };
