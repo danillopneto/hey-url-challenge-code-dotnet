@@ -75,7 +75,7 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
             var url = await _urlRepository.GetByShortUrlAsync(shortUrl, ct);
             if (url is null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             await _urlRepository.AddClicksToUrlAsync(url, _browserDetector.Browser.OS, _browserDetector.Browser.Name, ct);
@@ -89,7 +89,7 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
             var url = await _urlRepository.GetByShortUrlAsync(shortUrl, ct);
             if (url is null)
             {
-                return NotFound();
+                return View("NotFound");
             }
 
             return View(new ShowViewModel(url));
