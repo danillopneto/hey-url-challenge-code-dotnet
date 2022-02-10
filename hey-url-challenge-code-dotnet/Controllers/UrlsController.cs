@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using HeyUrlChallengeCodeDotnet.Models;
+using HeyUrlChallengeCodeDotnet.Validators;
 using HeyUrlChallengeCodeDotnet.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Shyjus.BrowserDetection;
 
@@ -13,12 +17,37 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
     {
         private readonly ILogger<UrlsController> _logger;
         private static readonly Random getrandom = new Random();
-        private readonly IBrowserDetector browserDetector;
+        private readonly IBrowserDetector _browserDetector;
+        private readonly IConfiguration _configuration;
 
-        public UrlsController(ILogger<UrlsController> logger, IBrowserDetector browserDetector)
+        public UrlsController(
+                              ILogger<UrlsController> logger, 
+                              IBrowserDetector browserDetector,
+                              IConfiguration configuration)
         {
-            this.browserDetector = browserDetector;
-            _logger = logger;
+            _browserDetector = browserDetector ?? throw new ArgumentNullException(nameof(browserDetector));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        [HttpPost]
+        public IActionResult Create(HomeViewModel viewModel, CancellationToken ct)
+        {
+            var url = new Url { OriginalUrl = viewModel.NewUrl };
+
+            var result = new UrlValidator().Validate(url);
+            if (!result.IsValid)
+            {
+                var messages = string.Join(Environment.NewLine, result.Errors.Select(x => x.ErrorMessage));
+                TempData["Notice"] = messages;
+            }
+            else
+            {
+                var size = _configuration.GetValue<int>("ShortUrlSize");
+                url.GenerateShortUrl(size);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Index()
@@ -42,12 +71,11 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
                     Count = getrandom.Next(1, 10)
                 },
             };
-            model.NewUrl = new();
             return View(model);
         }
 
         [Route("/{url}")]
-        public IActionResult Visit(string url) => new OkObjectResult($"{url}, {this.browserDetector.Browser.OS}, {this.browserDetector.Browser.Name}");
+        public IActionResult Visit(string url) => new OkObjectResult($"{url}, {this._browserDetector.Browser.OS}, {this._browserDetector.Browser.Name}");
 
         [Route("urls/{url}")]
         public IActionResult Show(string url) => View(new ShowViewModel

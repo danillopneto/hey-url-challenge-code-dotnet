@@ -21,7 +21,7 @@
                     </div>
                     <div class="row">
                         <div class="col m6 offset-m2">
-                            <input type="text" class="validate form-control" placeholder="Your original URL here"/>
+                            @(Html.TextBoxFor(x => x.NewUrl, new { @class = "validate form-control" , @placeholder = "Your original URL here"} ))
                         </div>
                         <div class="col m2">
                             <button type="submit" class="btn">Shorten URL</button>
