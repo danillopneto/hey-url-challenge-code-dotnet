@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace hey_url_challenge_code_dotnet.Migrations
+namespace HeyUrlChallengeCodeDotnet.Migrations
 {
     public partial class InitialMigration : Migration
     {

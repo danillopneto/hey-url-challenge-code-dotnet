@@ -1,4 +1,4 @@
-using hey_url_challenge_code_dotnet.Models;
+using HeyUrlChallengeCodeDotnet.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HeyUrlChallengeCodeDotnet.Data

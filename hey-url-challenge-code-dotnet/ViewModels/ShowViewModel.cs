@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using hey_url_challenge_code_dotnet.Models;
+using HeyUrlChallengeCodeDotnet.Models;
 
-namespace hey_url_challenge_code_dotnet.ViewModels
+namespace HeyUrlChallengeCodeDotnet.ViewModels
 {
     public class ShowViewModel
     {

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace hey_url_challenge_code_dotnet.Migrations
+namespace HeyUrlChallengeCodeDotnet.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
     [Migration("20210613212957_InitialMigration")]
@@ -21,7 +21,7 @@ namespace hey_url_challenge_code_dotnet.Migrations
                 .HasAnnotation("ProductVersion", "5.0.7")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("hey_url_challenge_code_dotnet.Models.Url", b =>
+            modelBuilder.Entity("HeyUrlChallengeCodeDotnet.Models.Url", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using hey_url_challenge_code_dotnet.Models;
-using hey_url_challenge_code_dotnet.ViewModels;
+using HeyUrlChallengeCodeDotnet.Models;
+using HeyUrlChallengeCodeDotnet.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Shyjus.BrowserDetection;
