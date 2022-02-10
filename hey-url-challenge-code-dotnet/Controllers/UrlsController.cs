@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using HeyUrlChallengeCodeDotnet.Models;
+﻿using HeyUrlChallengeCodeDotnet.Models;
+using HeyUrlChallengeCodeDotnet.Repositories;
 using HeyUrlChallengeCodeDotnet.Validators;
 using HeyUrlChallengeCodeDotnet.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Shyjus.BrowserDetection;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace HeyUrlChallengeCodeDotnet.Controllers
 {
@@ -16,22 +17,27 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
     public class UrlsController : Controller
     {
         private readonly ILogger<UrlsController> _logger;
-        private static readonly Random getrandom = new Random();
+
         private readonly IBrowserDetector _browserDetector;
+
         private readonly IConfiguration _configuration;
 
+        private readonly IUrlRepository _urlRepository;
+
         public UrlsController(
-                              ILogger<UrlsController> logger, 
+                              ILogger<UrlsController> logger,
                               IBrowserDetector browserDetector,
-                              IConfiguration configuration)
+                              IConfiguration configuration,
+                              IUrlRepository urlRepository)
         {
             _browserDetector = browserDetector ?? throw new ArgumentNullException(nameof(browserDetector));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _urlRepository = urlRepository ?? throw new ArgumentNullException(nameof(urlRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpPost]
-        public IActionResult Create(HomeViewModel viewModel, CancellationToken ct)
+        public async Task<IActionResult> Create(HomeViewModel viewModel, CancellationToken ct)
         {
             var url = new Url { OriginalUrl = viewModel.NewUrl };
 
@@ -44,70 +50,49 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
             else
             {
                 var size = _configuration.GetValue<int>("ShortUrlSize");
-                url.GenerateShortUrl(size);
+
+                do
+                {
+                    url.GenerateShortUrl(size);
+                } while (await _urlRepository.GetByShortUrlAsync(url.ShortUrl, ct) is not null);
+
+                await _urlRepository.SaveAsync(url, ct);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(CancellationToken ct)
         {
             var model = new HomeViewModel();
-            model.Urls = new List<Url>
-            {
-                new()
-                {
-                    ShortUrl = "ABCDE",
-                    Count = getrandom.Next(1, 10)
-                },
-                new()
-                {
-                    ShortUrl = "ABCDE",
-                    Count = getrandom.Next(1, 10)
-                },
-                new()
-                {
-                    ShortUrl = "ABCDE",
-                    Count = getrandom.Next(1, 10)
-                },
-            };
+            model.Urls = await _urlRepository.GetAllAsync(ct);
             return View(model);
         }
 
-        [Route("/{url}")]
-        public IActionResult Visit(string url) => new OkObjectResult($"{url}, {this._browserDetector.Browser.OS}, {this._browserDetector.Browser.Name}");
-
-        [Route("urls/{url}")]
-        public IActionResult Show(string url) => View(new ShowViewModel
+        [Route("/{shortUrl}")]
+        public async Task<IActionResult> Visit(string shortUrl, CancellationToken ct)
         {
-            Url = new Url {ShortUrl = url, Count = getrandom.Next(1, 10)},
-            DailyClicks = new Dictionary<string, int>
+            var url = await _urlRepository.GetByShortUrlAsync(shortUrl, ct);
+            if (url is null)
             {
-                {"1", 13},
-                {"2", 2},
-                {"3", 1},
-                {"4", 7},
-                {"5", 20},
-                {"6", 18},
-                {"7", 10},
-                {"8", 20},
-                {"9", 15},
-                {"10", 5}
-            },
-            BrowseClicks = new Dictionary<string, int>
-            {
-                { "IE", 13 },
-                { "Firefox", 22 },
-                { "Chrome", 17 },
-                { "Safari", 7 },
-            },
-            PlatformClicks = new Dictionary<string, int>
-            {
-                { "Windows", 13 },
-                { "macOS", 22 },
-                { "Ubuntu", 17 },
-                { "Other", 7 },
+                return NotFound();
             }
-        });
+
+            await _urlRepository.AddClicksToUrlAsync(url, _browserDetector.Browser.OS, _browserDetector.Browser.Name, ct);
+
+            return Redirect(url.OriginalUrl);
+        }
+
+        [Route("urls/{shortUrl}")]
+        public async Task<IActionResult> Show(string shortUrl, CancellationToken ct)
+        {
+            var url = await _urlRepository.GetByShortUrlAsync(shortUrl, ct);
+            if (url is null)
+            {
+                return NotFound();
+            }
+
+            return View(new ShowViewModel(url));
+        }
     }
 }

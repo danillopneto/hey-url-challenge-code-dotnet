@@ -1,18 +1,25 @@
-﻿using System;
+﻿using HeyUrlChallengeCodeDotnet.Models.Base;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace HeyUrlChallengeCodeDotnet.Models
 {
-    public class Url
+    public class Url : BaseModel
     {
-        public Guid Id { get; set; }
+        public Url()
+        {
+            Clicks = new List<Click>();
+        }
 
         public string OriginalUrl { get; set; }
 
         public string ShortUrl { get; set; }
 
-        public int Count { get; set; }
+        public int Count => Clicks.Count;
+
+        public IList<Click> Clicks { get; set; }
 
         public void GenerateShortUrl(int size)
         {
