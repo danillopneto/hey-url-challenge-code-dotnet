@@ -1,11 +1,12 @@
-﻿using System;
+﻿using JsonApiDotNetCore.Resources;
+using JsonApiDotNetCore.Resources.Annotations;
+using System;
 
 namespace HeyUrlChallengeCodeDotnet.Models.Base
 {
-    public abstract class BaseModel
+    public abstract class BaseModel : Identifiable<Guid>
     {
-        public Guid Id { get; set; }
-
+        [Attr]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 }

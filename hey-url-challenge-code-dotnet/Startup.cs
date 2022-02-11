@@ -1,5 +1,6 @@
 using HeyUrlChallengeCodeDotnet.Data;
 using HeyUrlChallengeCodeDotnet.Repositories;
+using JsonApiDotNetCore.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,8 @@ namespace HeyUrlChallengeCodeDotnet
 
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+
+            services.AddJsonApi<ApplicationContext>(options => options.Namespace = "api/v1");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,6 +49,8 @@ namespace HeyUrlChallengeCodeDotnet
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseJsonApi();
 
             app.UseAuthorization();
 

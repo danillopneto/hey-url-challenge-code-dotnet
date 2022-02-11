@@ -1,4 +1,5 @@
 ﻿using HeyUrlChallengeCodeDotnet.Models.Base;
+using JsonApiDotNetCore.Resources.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace HeyUrlChallengeCodeDotnet.Models
 {
+    [Resource(nameof(Url))]
     public class Url : BaseModel
     {
         public Url()
@@ -13,12 +15,17 @@ namespace HeyUrlChallengeCodeDotnet.Models
             Clicks = new List<Click>();
         }
 
+        [Attr]
         public string OriginalUrl { get; set; }
 
+        [Attr]
         public string ShortUrl { get; set; }
-
+        
+        [Attr]
         public int Count => Clicks.Count;
 
+        [Attr]
+        [HasMany]
         public IList<Click> Clicks { get; set; }
 
         public void GenerateShortUrl(int size)
