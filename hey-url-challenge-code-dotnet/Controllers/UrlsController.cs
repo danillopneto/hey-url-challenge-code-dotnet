@@ -39,60 +39,94 @@ namespace HeyUrlChallengeCodeDotnet.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(HomeViewModel viewModel, CancellationToken ct)
         {
-            var url = new Url { OriginalUrl = viewModel.NewUrl };
-
-            var result = new UrlValidator().Validate(url);
-            if (!result.IsValid)
+            try
             {
-                var messages = string.Join(Environment.NewLine, result.Errors.Select(x => x.ErrorMessage));
-                TempData["Notice"] = messages;
-            }
-            else
-            {
-                var size = _configuration.GetValue<int>("ShortUrlSize");
+                var url = new Url { OriginalUrl = viewModel?.NewUrl };
 
-                do
+                var result = new UrlValidator().Validate(url);
+                if (!result.IsValid)
                 {
-                    url.GenerateShortUrl(size);
-                } while (await _urlRepository.GetByShortUrlAsync(url.ShortUrl, ct) is not null);
+                    var messages = string.Join(Environment.NewLine, result.Errors.Select(x => x.ErrorMessage));
+                    TempData["Notice"] = messages;
+                }
+                else
+                {
+                    var size = _configuration.GetValue<int>("ShortUrlSize");
 
-                await _urlRepository.SaveAsync(url, ct);
+                    do
+                    {
+                        url.GenerateShortUrl(size);
+                    } while (await _urlRepository.GetByShortUrlAsync(url.ShortUrl, ct) is not null);
+
+                    await _urlRepository.SaveAsync(url, ct);
+                }
+
+                return RedirectToAction(nameof(Index));
             }
-
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error trying to create a short url: {Url}.", viewModel?.NewUrl);
+                throw;
+            }
         }
 
         public async Task<IActionResult> Index(CancellationToken ct)
         {
-            var model = new HomeViewModel();
-            model.Urls = await _urlRepository.GetAllAsync(ct);
-            return View(model);
+            try
+            {
+                var model = new HomeViewModel
+                {
+                    Urls = await _urlRepository.GetAllAsync(ct)
+                };
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error trying to get the urls.");
+                throw;
+            }
         }
 
         [Route("/{shortUrl}")]
         public async Task<IActionResult> Visit(string shortUrl, CancellationToken ct)
         {
-            var url = await _urlRepository.GetByShortUrlAsync(shortUrl, ct);
-            if (url is null)
+            try
             {
-                return View("NotFound");
+                var url = await _urlRepository.GetByShortUrlAsync(shortUrl, ct);
+                if (url is null)
+                {
+                    return View("NotFound");
+                }
+
+                await _urlRepository.AddClicksToUrlAsync(shortUrl, _browserDetector.Browser.OS, _browserDetector.Browser.Name, ct);
+
+                return Redirect(url.OriginalUrl);
             }
-
-            await _urlRepository.AddClicksToUrlAsync(url, _browserDetector.Browser.OS, _browserDetector.Browser.Name, ct);
-
-            return Redirect(url.OriginalUrl);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error trying to visit the url: {Url}.", shortUrl);
+                throw;
+            }
         }
 
         [Route("urls/{shortUrl}")]
         public async Task<IActionResult> Show(string shortUrl, CancellationToken ct)
         {
-            var url = await _urlRepository.GetByShortUrlAsync(shortUrl, ct);
-            if (url is null)
+            try
             {
-                return View("NotFound");
-            }
+                var url = await _urlRepository.GetByShortUrlAsync(shortUrl, ct);
+                if (url is null)
+                {
+                    return View("NotFound");
+                }
 
-            return View(new ShowViewModel(url));
+                return View(new ShowViewModel(url));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error trying to see the metrics of the url: {Url}.", shortUrl);
+                throw;
+            }
         }
     }
 }

@@ -16,9 +16,10 @@ namespace HeyUrlChallengeCodeDotnet.Repositories
             _context = applicationContext ?? throw new System.ArgumentNullException(nameof(applicationContext));
         }
 
-        public async Task AddClicksToUrlAsync(Url url, string platform, string browser, CancellationToken ct)
+        public async Task AddClicksToUrlAsync(string shortUrl, string platform, string browser, CancellationToken ct)
         {
-            url.Clicks.Add(new Click(platform, browser));
+            var url = await _context.Urls.Include(c => c.Clicks).FirstOrDefaultAsync(x => x.ShortUrl == shortUrl, ct);
+            url.Clicks.Add(new Click(platform, browser) { UrlId = url.Id });
 
             await _context.SaveChangesAsync(ct);
         }
