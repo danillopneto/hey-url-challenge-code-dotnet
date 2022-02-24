@@ -1,4 +1,6 @@
 using HeyUrlChallengeCodeDotnet.Data;
+using HeyUrlChallengeCodeDotnet.Repositories;
+using JsonApiDotNetCore.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +24,12 @@ namespace HeyUrlChallengeCodeDotnet
         {
             services.AddBrowserDetection();
             services.AddControllersWithViews();
-            services.AddDbContext<ApplicationContext>(options => options.UseInMemoryDatabase(databaseName: "HeyUrl"));
+            services.AddScoped<IUrlRepository, UrlRepository>();
+
+            var connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+
+            services.AddJsonApi<ApplicationContext>(options => options.Namespace = "api/v1");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,6 +50,8 @@ namespace HeyUrlChallengeCodeDotnet
 
             app.UseRouting();
 
+            app.UseJsonApi();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -54,7 +63,7 @@ namespace HeyUrlChallengeCodeDotnet
 
             using var scope = app.ApplicationServices.CreateScope();
             var context = scope.ServiceProvider.GetService<ApplicationContext>();
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
         }
     }
 }

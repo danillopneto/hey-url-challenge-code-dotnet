@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using hey_url_challenge_code_dotnet.Models;
+﻿using HeyUrlChallengeCodeDotnet.Models;
+using System.Collections.Generic;
 
-namespace hey_url_challenge_code_dotnet.ViewModels
+namespace HeyUrlChallengeCodeDotnet.ViewModels
 {
     public class HomeViewModel
     {
         public IEnumerable<Url> Urls { get; set; }
-        public Url NewUrl { get; set; }
+
+        public string NewUrl { get; set; }
     }
 }
